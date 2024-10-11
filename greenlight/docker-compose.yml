@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  psql:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-mydatabase}   # default value if not set
+      POSTGRES_USER: ${DB_USERNAME:-myuser}     # default value if not set
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-mypassword} # default value if not set
+    ports:
+      - "${DB_PORT:-5432}:5432"                  # default PostgreSQL port
+    volumes:
+      - psql_volume:/var/lib/postgresql/data
+
+volumes:
+  psql_volume:
