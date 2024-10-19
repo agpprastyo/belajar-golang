@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS `tasks` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `task` VARCHAR(255) NOT NULL,
+    `done` INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`)
+);

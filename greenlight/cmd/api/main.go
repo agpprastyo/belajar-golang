@@ -5,8 +5,11 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/joho/godotenv/autoload"
 	_ "github.com/lib/pq"
+	"greenlight/internal/data"
 	"log"
 	"net/http"
 	"os"
@@ -21,12 +24,16 @@ type config struct {
 	port int
 	env  string
 	db   struct {
-		dsn string
+		dsn          string
+		maxOpenConns int
+		maxIdleConns int
+		maxIdleTime  string
 	}
 }
 type application struct {
 	config config
 	logger *log.Logger
+	models data.Models
 }
 
 var (
@@ -48,6 +55,10 @@ func main() {
 
 	//"postgres://%s:%s@%s:%s/%s?sslmode=disable&search_path=%s", username, password, host, port, database, schema
 	flag.StringVar(&cfg.db.dsn, "db-dsn", fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable&search_path=%s", username, password, host, port, database, schema), "PostgreSQL DSN")
+	flag.IntVar(&cfg.db.maxOpenConns, "db-max-open-conns", 25, "PostgreSQLmax open connections")
+	flag.IntVar(&cfg.db.maxIdleConns, "db-max-idle-conns", 25, "PostgreSQLmax idle connections")
+	flag.StringVar(&cfg.db.maxIdleTime, "db-max-idle-time", "15m",
+		"PostgreSQL max connection idle time")
 	flag.Parse()
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 	// Call the openDB() helper function (see below) to create the connection pool,
@@ -66,6 +77,7 @@ func main() {
 	app := &application{
 		config: cfg,
 		logger: logger,
+		models: data.NewModels(db),
 	}
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%d", cfg.port),
@@ -81,25 +93,30 @@ func main() {
 	logger.Fatal(err)
 }
 
-// The openDB() function returns a sql.DB connection pool.
 func openDB(cfg config) (*sql.DB, error) {
-	// Use sql.Open() to create an empty connection pool, using the DSN from the config
-	// struct.
 	db, err := sql.Open("postgres", cfg.db.dsn)
 	if err != nil {
 		return nil, err
 	}
-	// Create a context with a 5-second timeout deadline.
+	// Set the maximum number of open (in-use + idle) connections in the pool. Note that
+	// passing a value less than or equal to 0 will mean there is no limit.
+	db.SetMaxOpenConns(cfg.db.maxOpenConns)
+	// Set the maximum number of idle connections in the pool. Again, passing a value
+	// less than or equal to 0 will mean there is no limit.
+	db.SetMaxIdleConns(cfg.db.maxIdleConns)
+	// Use the time.ParseDuration() function to convert the idle timeout duration string
+	// to a time.Duration type.
+	duration, err := time.ParseDuration(cfg.db.maxIdleTime)
+	if err != nil {
+		return nil, err
+	}
+	// Set the maximum idle timeout.
+	db.SetConnMaxIdleTime(duration)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	// Use PingContext() to establish a new connection to the database, passing in the
-	// context we created above as a parameter. If the connection couldn't be
-	// established successfully within the 5 second deadline, then this will return an
-	// error.
 	err = db.PingContext(ctx)
 	if err != nil {
 		return nil, err
 	}
-	// Return the sql.DB connection pool.
 	return db, nil
 }

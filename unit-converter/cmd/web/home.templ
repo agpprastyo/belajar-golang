@@ -1,0 +1,33 @@
+package web
+
+templ Home() {
+    <Home>
+        <h1>Unit Converter</h1>
+        <form action="/convert" method="POST">
+            <label>
+<input type="text" name="value" placeholder="Value" required/>
+</label>
+            <select name="from" required>
+                <option value="m">Meter</option>
+                <option value="km">Kilometer</option>
+                <option value="cm">Centimeter</option>
+                <option value="mm">Milimeter</option>
+                <option value="mi">Mile</option>
+                <option value="yd">Yard</option>
+                <option value="ft">Feet</option>
+                <option value="in">Inch</option>
+            </select>
+            <select name="to" required>
+                <option value="m">Meter</option>
+                <option value="km">Kilometer</option>
+                <option value="cm">Centimeter</option>
+                <option value="mm">Milimeter</option>
+                <option value="mi">Mile</option>
+                <option value="yd">Yard</option>
+                <option value="ft">Feet</option>
+                <option value="in">Inch</option>
+            </select>
+            <button type="submit">Convert</button>
+        </form>
+    </Home>
+}
