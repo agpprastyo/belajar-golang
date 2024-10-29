@@ -4,7 +4,7 @@ services:
   psql:
     image: postgres:latest
     environment:
-      POSTGRES_DB: ${DB_DATABASE:-mydatabase}   # default value if not set
+      POSTGRES_DB: ${DB_DATABASE:-mydatabase}
       POSTGRES_USER: ${DB_USERNAME:-myuser}     # default value if not set
       POSTGRES_PASSWORD: ${DB_PASSWORD:-mypassword} # default value if not set
     ports:
