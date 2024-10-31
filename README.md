@@ -10,4 +10,6 @@ This repository contains various Golang projects that I've built so far. Each pr
    Project submission for [Task Tracker](https://roadmap.sh/projects/task-tracker)
 
 3. [GitHub Activity](./github-activity-cli) - A simple CLI application to fetch GitHub activity.  
-   Project submission for [GitHub Activity](https://roadmap.sh/projects/github-activity)
+   Project submission for [GitHub Activity](https://roadmap.sh/projects/github-user-activity)
+4. [Number Guessing Game](./number-guessing-game) - A simple CLI game to guess a number.  
+   Project submission for [Number Guessing Game](https://roadmap.sh/projects/number-guessing-game)
