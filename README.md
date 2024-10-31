@@ -5,6 +5,9 @@ This repository contains various Golang projects that I've built so far. Each pr
 ## Projects
 1. [Expense Tracker](./expense-tracker-cli) - A simple CLI application to track expenses.  
   Project submission for [Expense Tracker](https://roadmap.sh/projects/expense-tracker)
-###
+
 2. [Task Tracker CLI](./task-tacker-cli) - A simple CLI application to track tasks.  
    Project submission for [Task Tracker](https://roadmap.sh/projects/task-tracker)
+
+3. [GitHub Activity](./github-activity-cli) - A simple CLI application to fetch GitHub activity.  
+   Project submission for [GitHub Activity](https://roadmap.sh/projects/github-activity)
