@@ -14,3 +14,5 @@ This repository contains various Golang projects that I've built so far. Each pr
 
 4. [Number Guessing Game](./number-guessing-game) - A simple CLI game to guess a number.  
    Project submission for [Number Guessing Game](https://roadmap.sh/projects/number-guessing-game)
+5. [Unit Converter](./unit-converter) - A simple CLI application to convert units.  
+   Project submission for [Unit Converter](https://roadmap.sh/projects/unit-converter)
