@@ -2,7 +2,6 @@ package server
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
 	"os"
 	"strconv"
@@ -31,22 +30,4 @@ func NewServer() *http.Server {
 	}
 
 	return server
-}
-
-// Render template
-func (s *Server) RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, data interface{}) error {
-	tmplPath := fmt.Sprintf("templates/%s", tmpl)
-	t, err := template.ParseFiles(tmplPath)
-	if err != nil {
-		http.Error(w, "Unable to load template", http.StatusInternalServerError)
-		return err
-	}
-
-	err = t.Execute(w, data)
-	if err != nil {
-		http.Error(w, "Unable to render template", http.StatusInternalServerError)
-		return err
-	}
-
-	return nil
 }
